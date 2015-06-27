@@ -21,13 +21,18 @@ import static org.junit.Assert.*;
 import static org.springframework.hateoas.client.Hop.*;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import lombok.Data;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,15 +42,19 @@ import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.client.Traverson.TraversalBuilder;
 import org.springframework.hateoas.core.JsonPathLinkDiscoverer;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -354,6 +363,113 @@ public class TraversonTests {
 		final Item item = itemResource.getContent();
 		assertThat(item.image, equalTo(server.rootResource() + "/springagram/file/cat"));
 		assertThat(item.description, equalTo("cat"));
+	}
+
+	@Test
+	public void trapHopResults() {
+
+		this.traverson = new Traverson(URI.create(server.rootResource() + "/springagram"), MediaTypes.HAL_JSON);
+
+		TestTraversalHandler handler = new TestTraversalHandler();
+
+		ParameterizedTypeReference<Resource<Item>> resourceParameterizedTypeReference = new ParameterizedTypeReference<Resource<Item>>() {};
+
+		traverson.//
+				follow(rel("items").withParameter("projection", "noImages")).//
+				follow("$._embedded.items[0]._links.self.href").//
+				andDo(handler).//
+				toObject(resourceParameterizedTypeReference);
+
+		assertThat(handler.getChunks().size(), equalTo(2));
+
+		TestTraversalHandler.BeforeAndAfter chunk1 = handler.getChunks().get(0);
+		assertThat(chunk1.getUri(), endsWith("/springagram"));
+		assertThat(chunk1.getResponse().getStatusCode(), equalTo(HttpStatus.OK));
+		assertThat(chunk1.getLink().getRel(), equalTo("items"));
+		assertThat(chunk1.getMergedParameters().size(), equalTo(1));
+		assertThat(chunk1.getLink().expand(chunk1.getMergedParameters()).getHref(),
+				endsWith("/springagram/items?projection=noImages"));
+		assertThat(chunk1.getRels().size(), equalTo(2));
+		assertThat(chunk1.getRels().get(0).getRel(), equalTo("items"));
+		assertThat(chunk1.getRels().get(1).getRel(), equalTo("$._embedded.items[0]._links.self.href"));
+
+		TestTraversalHandler.BeforeAndAfter chunk2 = handler.getChunks().get(1);
+		assertThat(chunk2.getUri(), endsWith("/springagram/items?projection=noImages"));
+		assertThat(chunk2.getResponse().getStatusCode(), equalTo(HttpStatus.OK));
+		assertThat(chunk2.getLink().getRel(), equalTo(".href"));
+		assertThat(chunk2.getLink().getHref(), endsWith("/springagram/items/1{?projection}"));
+		assertThat(chunk2.getMergedParameters().size(), equalTo(0));
+		assertThat(chunk2.getLink().getHref(), endsWith("/springagram/items/1{?projection}"));
+		assertThat(chunk2.getRels().size(), equalTo(1));
+		assertThat(chunk2.getRels().get(0).getRel(), equalTo("$._embedded.items[0]._links.self.href"));
+
+	}
+
+	@Data
+	static class TestTraversalHandler implements TraversalHandler {
+
+		private List<BeforeAndAfter> chunks = new ArrayList<BeforeAndAfter>();
+
+		@Override
+		public void beforeHop(String uri, List<Hop> rels) {
+			chunks.add(new BeforeAndAfter(uri, rels));
+		}
+
+		@Override
+		public void afterHop(String uri, HttpEntity<?> request, ResponseEntity<String> response, Rels.Rel rel, Link link,
+							 Map<String, Object> mergedParameters) {
+			chunks.get(chunks.size()-1).add(request, response, rel, link, mergedParameters);
+		}
+
+		@Data
+		static class BeforeAndAfter {
+
+			private final String uri;
+			private final List<Hop> rels;
+			private HttpEntity<?> request;
+			private ResponseEntity<String> response;
+			private Rels.Rel rel;
+			private Link link;
+			private Map<String, Object> mergedParameters;
+
+			public BeforeAndAfter(String uri, List<Hop> rels) {
+
+				this.uri = uri;
+				this.rels = rels;
+			}
+
+			public void add(HttpEntity<?> request, ResponseEntity<String> response, Rels.Rel rel, Link link,
+							Map<String, Object> mergedParameters) {
+
+				this.request = request;
+				this.response = response;
+				this.rel = rel;
+				this.link = link;
+				this.mergedParameters = mergedParameters;
+			}
+		}
+	}
+
+	@Test
+	public void testHopCatcher() {
+
+		this.traverson = new Traverson(URI.create(server.rootResource() + "/springagram"), MediaTypes.HAL_JSON);
+
+		final StringWriter out = new StringWriter();
+		TraversalHandler handler = new PrintWriterTraversalHandler(new PrintWriter(out));
+
+		ParameterizedTypeReference<Resource<Item>> resourceParameterizedTypeReference = new ParameterizedTypeReference<Resource<Item>>() {};
+
+		Resource<Item> itemResource = traverson.//
+				follow(rel("items").withParameter("projection", "noImages")).//
+				follow("$._embedded.items[0]._links.self.href").//
+				andDo(handler).//
+				toObject(resourceParameterizedTypeReference);
+
+		String[] results = StringUtils.tokenizeToStringArray(out.toString(), System.lineSeparator());
+		for (int i=0; i < results.length ; i++) {
+			System.out.println(i + ": " + results[i]);
+		}
 	}
 
 	private void setUpActors() {

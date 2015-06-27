@@ -224,6 +224,10 @@ public class Traverson {
 		return new HttpEntity<Void>(toSend);
 	}
 
+	public List<TraversalHandler> getHandlers() {
+		return null;
+	}
+
 	/**
 	 * Builder API to customize traversals.
 	 * 
@@ -234,6 +238,7 @@ public class Traverson {
 		private List<Hop> rels = new ArrayList<Hop>();
 		private Map<String, Object> templateParameters = new HashMap<String, Object>();
 		private HttpHeaders headers = new HttpHeaders();
+		private List<TraversalHandler> handlers = new ArrayList<TraversalHandler>();
 
 		private TraversalBuilder() {}
 
@@ -379,15 +384,22 @@ public class Traverson {
 
 		private String traverseToFinalUrl(boolean expandFinalUrl) {
 
-			String uri = getAndFindLinkWithRel(baseUri.toString(), rels.iterator());
+			String uri = getAndFindLinkWithRel(baseUri.toString(), rels);
 			UriTemplate uriTemplate = new UriTemplate(uri);
 			return expandFinalUrl ? uriTemplate.expand(templateParameters).toString() : uriTemplate.toString();
 		}
 
-		private String getAndFindLinkWithRel(String uri, Iterator<Hop> rels) {
+		private String getAndFindLinkWithRel(String uri, List<Hop> rels) {
 
-			if (!rels.hasNext()) {
+			if (rels.size() == 0) {
 				return uri;
+			}
+
+			/**
+			 * Assuming you haven't run out of rels, log the state of things before the hop
+			 */
+			for (TraversalHandler handler : this.handlers) {
+				handler.beforeHop(uri, rels);
 			}
 
 			HttpEntity<?> request = prepareRequest(headers);
@@ -396,7 +408,7 @@ public class Traverson {
 			MediaType contentType = responseEntity.getHeaders().getContentType();
 			String responseBody = responseEntity.getBody();
 
-			Hop thisHop = rels.next();
+			Hop thisHop = rels.get(0);
 
 			Rel rel = Rels.getRelFor(thisHop.getRel(), discoverers);
 			Link link = rel.findInResponse(responseBody, contentType);
@@ -406,14 +418,25 @@ public class Traverson {
 						String.format("Expected to find link with rel '%s' in response %s!", rel, responseBody));
 			}
 
+			for (TraversalHandler handler : this.handlers) {
+				handler.afterHop(uri, request, responseEntity, rel, link, thisHop.getMergedParameters(templateParameters));
+			}
+
 			/**
 			 * Don't expand if the parameters are empty
 			 */
 			if (thisHop.getParameters().isEmpty()) {
-				return getAndFindLinkWithRel(link.getHref(), rels);
+				return getAndFindLinkWithRel(link.getHref(), rels.subList(1, rels.size()));
 			} else {
-				return getAndFindLinkWithRel(link.expand(thisHop.getMergedParameters(templateParameters)).getHref(), rels);
+				return getAndFindLinkWithRel(link.expand(thisHop.getMergedParameters(templateParameters)).getHref(),
+						rels.subList(1, rels.size()));
 			}
+		}
+
+		public TraversalBuilder andDo(TraversalHandler handler) {
+
+			this.handlers.add(handler);
+			return this;
 		}
 	}
 }

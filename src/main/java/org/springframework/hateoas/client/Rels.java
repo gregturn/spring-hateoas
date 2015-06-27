@@ -149,5 +149,11 @@ class Rels {
 		public Link findInResponse(String representation, MediaType mediaType) {
 			return new Link(JsonPath.<Object> read(representation, jsonPath).toString(), rel);
 		}
+
+		@Override
+		public String toString() {
+			return this.jsonPath;
+		}
+
 	}
 }
