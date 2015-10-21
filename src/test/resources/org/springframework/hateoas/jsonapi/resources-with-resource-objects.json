@@ -1,34 +1,36 @@
 {
-  "collection" : {
-    "version" : "1.0",
-    "href" : "localhost",
+  "data" : [ {
+    "type" : "String",
+    "id" : "localhost",
+    "attributes" : "first",
     "links" : [ {
       "rel" : "self",
       "href" : "localhost"
-    }, {
-      "rel" : "next",
-      "href" : "/page/2"
     } ],
-    "items" : [ {
-      "href" : "localhost",
-      "data" : [ "first" ],
-      "links" : [ {
-        "rel" : "self",
-        "href" : "localhost"
-      }, {
-        "rel" : "orders",
-        "href" : "orders"
-      } ]
-    }, {
-      "href" : "remotehost",
-      "data" : [ "second" ],
-      "links" : [ {
-        "rel" : "self",
-        "href" : "remotehost"
-      }, {
-        "rel" : "orders",
-        "href" : "order"
-      } ]
+    "relationships" : [ {
+      "rel" : "orders",
+      "href" : "orders"
     } ]
-  }
+  }, {
+    "type" : "String",
+    "id" : "remotehost",
+    "attributes" : "second",
+    "links" : [ {
+      "rel" : "self",
+      "href" : "remotehost"
+    } ],
+    "relationships" : [ {
+      "rel" : "orders",
+      "href" : "order"
+    } ]
+  } ],
+  "links" : [ {
+    "rel" : "self",
+    "href" : "localhost"
+  }, {
+    "rel" : "next",
+    "href" : "/page/2"
+  } ],
+  "relationships" : [ ],
+  "meta" : null
 }

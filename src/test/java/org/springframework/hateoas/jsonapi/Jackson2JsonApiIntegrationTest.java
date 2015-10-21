@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import org.springframework.core.io.ClassPathResource;
@@ -166,6 +165,8 @@ public class Jackson2JsonApiIntegrationTest extends AbstractJackson2MarshallingI
 		expected.add(new Link("localhost"));
 		expected.add(new Link("/page/2").withRel("next"));
 
+		System.out.println(mapper.writeValueAsString(expected));
+
 		Resources<Resource<String>> actual = mapper.readValue(MappingUtils.read(new ClassPathResource("resources-with-resource-objects.json", getClass())),
 				mapper.getTypeFactory().constructParametricType(Resources.class,
 						mapper.getTypeFactory().constructParametricType(Resource.class, String.class)));
@@ -194,7 +195,6 @@ public class Jackson2JsonApiIntegrationTest extends AbstractJackson2MarshallingI
 		assertThat(actual, is(MappingUtils.read(new ClassPathResource("paged-resources.json", getClass()))));
 	}
 
-	@Ignore(value = "Not yet determined where to store paging metadata")
 	@Test
 	public void deserializesPagedResource() throws Exception {
 		PagedResources<Resource<SimplePojo>> result = mapper.readValue(MappingUtils.read(new ClassPathResource("paged-resources.json", getClass())),

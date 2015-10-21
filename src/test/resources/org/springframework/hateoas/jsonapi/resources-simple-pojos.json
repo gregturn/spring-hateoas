@@ -1,37 +1,39 @@
 {
-  "collection" : {
-    "version" : "1.0",
-    "href" : "localhost",
+  "data" : [ {
+    "type" : "SimplePojo",
+    "id" : "localhost",
+    "attributes" : {
+      "text" : "text",
+      "number" : 1
+    },
     "links" : [ {
       "rel" : "self",
       "href" : "localhost"
-    }, {
-      "rel" : "next",
-      "href" : "/page/2"
     } ],
-    "items" : [ {
-      "href" : "localhost",
-      "data" : [ {
-        "text" : "text",
-        "number" : 1
-      } ],
-      "links" : [ {
-        "rel" : "self",
-        "href" : "localhost"
-      }, {
-        "rel" : "orders",
-        "href" : "orders"
-      } ]
-    }, {
-      "href" : "localhost",
-      "data" : [ {
-        "text" : "text2",
-        "number" : 2
-      } ],
-      "links" : [ {
-        "rel" : "self",
-        "href" : "localhost"
-      } ]
+    "relationships" : [ {
+      "rel" : "orders",
+      "href" : "orders"
     } ]
-  }
+  }, {
+    "type" : "SimplePojo",
+    "id" : "localhost",
+    "attributes" : {
+      "text" : "text2",
+      "number" : 2
+    },
+    "links" : [ {
+      "rel" : "self",
+      "href" : "localhost"
+    } ],
+    "relationships" : [ ]
+  } ],
+  "links" : [ {
+    "rel" : "self",
+    "href" : "localhost"
+  }, {
+    "rel" : "next",
+    "href" : "/page/2"
+  } ],
+  "relationships" : [ ],
+  "meta" : null
 }

@@ -37,8 +37,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class JsonApiSingle<T> {
 
 	private JsonApiData<T> data;
+
 	private List<Link> links;
+
 	private List<Link> relationships;
+
 	private Object meta;
 
 	@JsonCreator

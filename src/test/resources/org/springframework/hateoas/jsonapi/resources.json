@@ -1,19 +1,21 @@
 {
-  "collection" : {
-    "version" : "1.0",
-    "href" : "localhost",
-    "links" : [ {
-      "rel" : "self",
-      "href" : "localhost"
-    } ],
-    "items" : [ {
-      "href" : null,
-      "data" : [ "first" ],
-      "links" : null
-    }, {
-      "href" : null,
-      "data" : [ "second" ],
-      "links" : null
-    } ]
-  }
+  "data" : [ {
+    "type" : "String",
+    "id" : null,
+    "attributes" : "first",
+    "links" : null,
+    "relationships" : null
+  }, {
+    "type" : "String",
+    "id" : null,
+    "attributes" : "second",
+    "links" : null,
+    "relationships" : null
+  } ],
+  "links" : [ {
+    "rel" : "self",
+    "href" : "localhost"
+  } ],
+  "relationships" : [ ],
+  "meta" : null
 }

@@ -17,8 +17,6 @@ package org.springframework.hateoas.jsonapi;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
-import static org.springframework.hateoas.jsonapi.JsonApiSingle.*;
-import static org.springframework.hateoas.jsonapi.JsonApiData.*;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -52,17 +50,15 @@ public class JacksonSerializationTest {
 	@Test
 	public void createSimpleCollection() throws IOException {
 
-		JsonApiData data = jsonApiData()
+		JsonApiSingle<String> jsonApi = JsonApiSingle.<String>jsonApi()
+			.links(Arrays.asList(new Link("foo").withSelfRel()))
+			.relationships(Arrays.asList(new Link("localhost/brother").withRel("brother")))
+			.data(JsonApiData.<String>jsonApiData()
 				.type(String.class.getSimpleName())
 				.attributes("Greetings")
 				.links(Arrays.asList(new Link("localhost").withSelfRel()))
 				.relationships(Arrays.asList(new Link("localhost/manager").withRel("manager")))
-				.build();
-
-		JsonApiSingle<String> jsonApi = jsonApi()
-			.links(Arrays.asList(new Link("foo").withSelfRel()))
-			.relationships(Arrays.asList(new Link("localhost/brother").withRel("brother")))
-			.data(data)
+				.build())
 			.build();
 
 		String actual = mapper.writeValueAsString(jsonApi);

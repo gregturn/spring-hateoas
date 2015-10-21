@@ -240,7 +240,9 @@ public class Jackson2JsonApiModule extends SimpleModule {
 						.attributes(value.getContent())
 						.links(organizedLinks.ianaLinks)
 						.relationships(organizedLinks.getRelationshipLinks())
-						.build());
+						.build())
+				.links(organizedLinks.getIanaLinks())
+				.relationships(organizedLinks.getRelationshipLinks());
 
 			provider.findValueSerializer(JsonApiSingle.class, property).serialize(jsonApi.build(), jgen, provider);
 		}
@@ -520,8 +522,12 @@ public class Jackson2JsonApiModule extends SimpleModule {
 			JsonApiSingle<?> jsonApi = (JsonApiSingle<?>) jp.getCodec().readValues(jp, wrappedType).next();
 
 			List<Link> links = new ArrayList<Link>();
-			links.addAll(jsonApi.getLinks());
-			links.addAll(jsonApi.getRelationships());
+			if (jsonApi.getLinks() != null) {
+				links.addAll(jsonApi.getLinks());
+			}
+			if (jsonApi.getRelationships() != null) {
+				links.addAll(jsonApi.getRelationships());
+			}
 
 			return new Resource<Object>(jsonApi.getData().getAttributes(), links);
 		}
@@ -588,8 +594,12 @@ public class Jackson2JsonApiModule extends SimpleModule {
 				if (this.contentType.hasGenericTypes()) {
 
 					List<Link> links = new ArrayList<Link>();
-					links.addAll(item.getLinks());
-					links.addAll(item.getRelationships());
+					if (item.getLinks() != null) {
+						links.addAll(item.getLinks());
+					}
+					if (item.getRelationships() != null) {
+						links.addAll(item.getRelationships());
+					}
 
 					if (this.contentType.containedType(0).hasRawClass(Resource.class)) {
 						items.add(new Resource<Object>(itemData, links));
@@ -680,7 +690,9 @@ public class Jackson2JsonApiModule extends SimpleModule {
 
 			}
 
-			PagedResources.PageMetadata pageMetadata = (PagedResources.PageMetadata) jsonApi.getMeta();
+			Map<String, Integer> metadata = (Map) jsonApi.getMeta();
+			PagedResources.PageMetadata pageMetadata = new PagedResources.PageMetadata(metadata.get("size"),
+					metadata.get("number"), metadata.get("totalElements"), metadata.get("totalPages"));
 
 			List<Link> links = new ArrayList<Link>();
 			links.addAll(jsonApi.getLinks());

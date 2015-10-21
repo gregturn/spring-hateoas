@@ -35,12 +35,11 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 abstract public class ResourceSupportMixin extends ResourceSupport {
 
 	@Override
-	@XmlElement(name = "collection")
-	@JsonProperty("collection")
+	@XmlElement(name = "data")
+	@JsonProperty("data")
 	@JsonInclude(JsonInclude.Include.NON_EMPTY)
 	@JsonSerialize(using = Jackson2JsonApiModule.JsonApiLinkListSerializer.class)
 	@JsonDeserialize(using = Jackson2JsonApiModule.JsonApiLinkListDeserializer.class)
 	public abstract List<Link> getLinks();
-
 
 }

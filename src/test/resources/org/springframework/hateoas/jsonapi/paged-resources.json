@@ -1,34 +1,41 @@
 {
-  "collection" : {
-    "version" : "1.0",
-    "href" : null,
+  "data" : [ {
+    "type" : "SimplePojo",
+    "id" : "localhost",
+    "attributes" : {
+      "text" : "test1",
+      "number" : 1
+    },
     "links" : [ {
-      "rel" : "next",
-      "href" : "foo"
-    }, {
-      "rel" : "prev",
-      "href" : "bar"
+      "rel" : "self",
+      "href" : "localhost"
     } ],
-    "items" : [ {
-      "href" : "localhost",
-      "data" : [ {
-        "text" : "test1",
-        "number" : 1
-      } ],
-      "links" : [ {
-        "rel" : "self",
-        "href" : "localhost"
-      } ]
-    }, {
-      "href" : "localhost",
-      "data" : [ {
-        "text" : "test2",
-        "number" : 2
-      } ],
-      "links" : [ {
-        "rel" : "self",
-        "href" : "localhost"
-      } ]
-    } ]
+    "relationships" : [ ]
+  }, {
+    "type" : "SimplePojo",
+    "id" : "localhost",
+    "attributes" : {
+      "text" : "test2",
+      "number" : 2
+    },
+    "links" : [ {
+      "rel" : "self",
+      "href" : "localhost"
+    } ],
+    "relationships" : [ ]
+  } ],
+  "links" : [ {
+    "rel" : "next",
+    "href" : "foo"
+  }, {
+    "rel" : "prev",
+    "href" : "bar"
+  } ],
+  "relationships" : [ ],
+  "meta" : {
+    "size" : 2,
+    "totalElements" : 4,
+    "totalPages" : 2,
+    "number" : 0
   }
 }

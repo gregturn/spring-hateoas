@@ -1,11 +1,15 @@
 {
-  "collection" : {
-    "version" : "1.0",
-    "href" : "localhost",
+  "data" : {
+    "type" : "ResourceSupport",
+    "id" : "localhost",
+    "attributes" : null,
     "links" : [ {
       "rel" : "self",
       "href" : "localhost"
     } ],
-    "items" : [ ]
-  }
+    "relationships" : [ ]
+  },
+  "links" : null,
+  "relationships" : null,
+  "meta" : null
 }
