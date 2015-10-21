@@ -1,0 +1,22 @@
+{
+  "data" : {
+    "type" : "String",
+    "attributes" : "Greetings",
+    "links" : [ {
+      "rel" : "self",
+      "href" : "localhost"
+    } ],
+    "relationships" : [ {
+      "rel" : "manager",
+      "href" : "localhost/manager"
+    } ]
+  },
+  "links" : [ {
+    "rel" : "self",
+    "href" : "foo"
+  } ],
+  "relationships" : [ {
+    "rel" : "brother",
+    "href" : "localhost/brother"
+  } ]
+}

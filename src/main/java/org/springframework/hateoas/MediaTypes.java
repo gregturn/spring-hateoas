@@ -34,4 +34,14 @@ public class MediaTypes {
 	 * Public constant media type for {@code application/hal+json}.
 	 */
 	public static final MediaType HAL_JSON = MediaType.valueOf(HAL_JSON_VALUE);
+
+	/**
+	 * A String equivalent of {@link MediaTypes#JSON_API}.
+	 */
+	public static final String JSON_API_VALUE = "application/vnd.api+json";
+
+	/**
+	 * Public constant media type for {@code application/vnd.api+json}.
+	 */
+	public static final MediaType JSON_API = MediaType.valueOf(JSON_API_VALUE);
 }

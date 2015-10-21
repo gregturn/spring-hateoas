@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 the original author or authors.
+ * Copyright 2015 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,28 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.hateoas.alps;
+package org.springframework.hateoas.jsonapi;
 
-import java.util.List;
-
-import lombok.Builder;
-import lombok.Value;
+import org.springframework.hateoas.MediaTypes;
+import org.springframework.hateoas.core.JsonPathLinkDiscoverer;
 
 /**
- * A value object for an ALPS descriptor.
- * 
- * @author Oliver Gierke
- * @since 0.15
- * @see http://alps.io/spec/#prop-descriptor
+ * @author Greg Turnquist
  */
-@Value
-@Builder
-public class Descriptor {
+public class JsonApiLinkDiscoverer extends JsonPathLinkDiscoverer {
 
-	private final String id, href, name;
-	private final Doc doc;
-	private final Type type;
-	private final Ext ext;
-	private final String rt;
-	private final List<Descriptor> descriptors;
+	public JsonApiLinkDiscoverer() {
+		super("$.collection..links..['%s']..href", MediaTypes.JSON_API);
+	}
 }

@@ -1,0 +1,34 @@
+{
+  "collection" : {
+    "version" : "1.0",
+    "href" : "localhost",
+    "links" : [ {
+      "rel" : "self",
+      "href" : "localhost"
+    }, {
+      "rel" : "next",
+      "href" : "/page/2"
+    } ],
+    "items" : [ {
+      "href" : "localhost",
+      "data" : [ "first" ],
+      "links" : [ {
+        "rel" : "self",
+        "href" : "localhost"
+      }, {
+        "rel" : "orders",
+        "href" : "orders"
+      } ]
+    }, {
+      "href" : "remotehost",
+      "data" : [ "second" ],
+      "links" : [ {
+        "rel" : "self",
+        "href" : "remotehost"
+      }, {
+        "rel" : "orders",
+        "href" : "order"
+      } ]
+    } ]
+  }
+}

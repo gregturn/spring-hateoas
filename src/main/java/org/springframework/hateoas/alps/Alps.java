@@ -17,12 +17,12 @@ package org.springframework.hateoas.alps;
 
 import java.util.List;
 
+import lombok.Builder;
 import lombok.Value;
-import lombok.experimental.Builder;
 
-import org.springframework.hateoas.alps.Descriptor.DescriptorBuilder;
-import org.springframework.hateoas.alps.Doc.DocBuilder;
-import org.springframework.hateoas.alps.Ext.ExtBuilder;
+import org.springframework.hateoas.alps.Descriptor.*;
+import org.springframework.hateoas.alps.Doc.*;
+import org.springframework.hateoas.alps.Ext.*;
 
 /**
  * An ALPS document.

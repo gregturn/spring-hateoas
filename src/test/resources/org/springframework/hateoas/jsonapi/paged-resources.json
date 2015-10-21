@@ -1,0 +1,34 @@
+{
+  "collection" : {
+    "version" : "1.0",
+    "href" : null,
+    "links" : [ {
+      "rel" : "next",
+      "href" : "foo"
+    }, {
+      "rel" : "prev",
+      "href" : "bar"
+    } ],
+    "items" : [ {
+      "href" : "localhost",
+      "data" : [ {
+        "text" : "test1",
+        "number" : 1
+      } ],
+      "links" : [ {
+        "rel" : "self",
+        "href" : "localhost"
+      } ]
+    }, {
+      "href" : "localhost",
+      "data" : [ {
+        "text" : "test2",
+        "number" : 2
+      } ],
+      "links" : [ {
+        "rel" : "self",
+        "href" : "localhost"
+      } ]
+    } ]
+  }
+}
