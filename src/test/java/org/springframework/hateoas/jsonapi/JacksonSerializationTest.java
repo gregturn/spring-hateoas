@@ -19,13 +19,14 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.hateoas.Link;
 import org.springframework.hateoas.support.MappingUtils;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -50,15 +51,22 @@ public class JacksonSerializationTest {
 	@Test
 	public void createSimpleCollection() throws IOException {
 
-		JsonApiSingle<String> jsonApi = JsonApiSingle.<String>jsonApi()
-			.links(Arrays.asList(new Link("foo").withSelfRel()))
-			.relationships(Arrays.asList(new Link("localhost/brother").withRel("brother")))
-			.data(JsonApiData.<String>jsonApiData()
+		JsonApiData jsonApiData = JsonApiData.<String> jsonApiData()
 				.type(String.class.getSimpleName())
 				.attributes("Greetings")
-				.links(Arrays.asList(new Link("localhost").withSelfRel()))
-				.relationships(Arrays.asList(new Link("localhost/manager").withRel("manager")))
-				.build())
+				.links(new HashMap<String, String>())
+				.relationships(new HashMap<String, Map<String, String>>())
+				.build();
+
+		jsonApiData.getLinks().put("self", "localhost");
+
+		Map<String, String> subMap = new HashMap<String, String>();
+		subMap.put("self", "localhost/manager");
+		jsonApiData.getRelationships().put("manager", subMap);
+
+		JsonApiSingle<String> jsonApi = JsonApiSingle.<String>builder()
+			.links(Collections.singletonMap("self", "foo"))
+			.data(jsonApiData)
 			.build();
 
 		String actual = mapper.writeValueAsString(jsonApi);

@@ -15,12 +15,10 @@
  */
 package org.springframework.hateoas.jsonapi;
 
-import java.util.List;
+import java.util.Map;
 
 import lombok.Builder;
 import lombok.Value;
-
-import org.springframework.hateoas.Link;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -36,13 +34,13 @@ public class JsonApiData<T> {
 	private String type;
 	private String id;
 	private T attributes;
-	private List<Link> links;
-	private List<Link> relationships;
+	private Map<String, String> links;
+	private Map<String, Map<String, Map<String, String>>> relationships;
 
 	@JsonCreator
 	public JsonApiData(@JsonProperty("type") String type, @JsonProperty("id") String id,
-					   @JsonProperty("attributes") T attributes, @JsonProperty("links") List<Link> links,
-					   @JsonProperty("relationships") List<Link> relationships) {
+					   @JsonProperty("attributes") T attributes, @JsonProperty("links") Map<String, String> links,
+					   @JsonProperty("relationships") Map<String, Map<String, Map<String, String>>> relationships) {
 
 		this.type = type;
 		this.id = id;

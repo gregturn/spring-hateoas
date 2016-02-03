@@ -17,16 +17,12 @@ package org.springframework.hateoas.jsonapi;
 
 import static org.springframework.hateoas.jsonapi.JsonApiCollection.*;
 import static org.springframework.hateoas.jsonapi.JsonApiData.*;
-import static org.springframework.hateoas.jsonapi.JsonApiSingle.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.support.MessageSourceAccessor;
@@ -74,9 +70,6 @@ import com.fasterxml.jackson.databind.ser.ContextualSerializer;
  */
 public class Jackson2JsonApiModule extends SimpleModule {
 
-	private static Set<String> IANA_RELS = new HashSet<String>(Arrays.asList(Link.REL_SELF, Link.REL_FIRST,
-			Link.REL_PREVIOUS, Link.REL_NEXT, Link.REL_LAST));
-
 	public Jackson2JsonApiModule() {
 
 		super("json-api-module", new Version(1, 0, 0, null, "org.springframework.hateoas", "spring-hateoas"));
@@ -100,36 +93,6 @@ public class Jackson2JsonApiModule extends SimpleModule {
 	}
 
 	/**
-	 * Split up a list of links into IANA-approved rels vs. domain specific relationships.
-	 */
-	private static class OrganizedLinks {
-
-		private final List<Link> ianaLinks;
-		private final List<Link> relationshipLinks;
-
-		public OrganizedLinks(List<Link> links) {
-			this.ianaLinks = new ArrayList<Link>();
-			this.relationshipLinks = new ArrayList<Link>();
-
-			for (Link link : links) {
-				if (IANA_RELS.contains(link.getRel())) {
-					ianaLinks.add(link);
-				} else {
-					relationshipLinks.add(link);
-				}
-			}
-		}
-
-		public List<Link> getIanaLinks() {
-			return ianaLinks;
-		}
-
-		public List<Link> getRelationshipLinks() {
-			return relationshipLinks;
-		}
-	}
-
-	/**
 	 * Extract the id of a URI.
 	 * @param link
 	 * @return
@@ -138,6 +101,17 @@ public class Jackson2JsonApiModule extends SimpleModule {
 
 		String[] uriParts = link.expand().getHref().split("/");
 		return uriParts[uriParts.length - 1];
+	}
+
+	private static List<Link> getIanaLinks(List<Link> links) {
+
+		List<Link> ianaLinks = new ArrayList<Link>();
+		for (Link link : links) {
+			if (JsonApiOrganizedLinks.IANA_RELS.contains(link.getRel())) {
+				ianaLinks.add(link);
+			}
+		}
+		return ianaLinks;
 	}
 
 	/**
@@ -169,17 +143,35 @@ public class Jackson2JsonApiModule extends SimpleModule {
 			ResourceSupport resource = new ResourceSupport();
 			resource.add(value);
 
-			OrganizedLinks organizedLinks = new OrganizedLinks(resource.getLinks());
+			JsonApiOrganizedLinks organizedLinks = new JsonApiOrganizedLinks(resource.getLinks());
 
-			JsonApiSingleBuilder jsonApi = jsonApi()
-				.data(jsonApiData()
-						.type(resource.getClass().getSimpleName())
-						.id(getId(resource.getId()))
-						.links(organizedLinks.ianaLinks)
-						.relationships(organizedLinks.getRelationshipLinks())
-						.build());
+			JsonApiData jsonApiData = jsonApiData()
+				.type(resource.getClass().getSimpleName())
+				.id(getId(resource.getId()))
+				.links(new HashMap<String, String>())
+				.relationships(new HashMap<String, Map<String, Map<String, String>>>())
+				.build();
 
-			provider.findValueSerializer(JsonApiSingle.class, property).serialize(jsonApi.build(), jgen, provider);
+			for (Link link : organizedLinks.getIanaLinks()) {
+				jsonApiData.getLinks().put(link.getRel(), link.getHref());
+			}
+
+			for (Link link : organizedLinks.getRelationshipLinks()) {
+				Map<String, String> subMap = new HashMap<String, String>();
+				subMap.put("self", link.getHref());
+				jsonApiData.getRelationships().put(link.getRel(), subMap);
+			}
+
+			JsonApiSingle jsonApi = JsonApiSingle.builder()
+				.data(jsonApiData)
+				.links(new HashMap<String, String>())
+				.build();
+
+			for (Link link : organizedLinks.getIanaLinks()) {
+				jsonApi.getLinks().put(link.getRel(), link.getHref());
+			}
+
+			provider.findValueSerializer(JsonApiSingle.class, property).serialize(jsonApi, jgen, provider);
 		}
 
 		@Override
@@ -231,20 +223,36 @@ public class Jackson2JsonApiModule extends SimpleModule {
 		@Override
 		public void serialize(Resource<?> value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonGenerationException {
 
-			OrganizedLinks organizedLinks = new OrganizedLinks(value.getLinks());
+			JsonApiOrganizedLinks organizedLinks = new JsonApiOrganizedLinks(value.getLinks());
 
-			JsonApiSingleBuilder jsonApi = jsonApi()
-				.data(jsonApiData()
-						.type(value.getClass().getSimpleName())
-						.id(getId(value.getId()))
-						.attributes(value.getContent())
-						.links(organizedLinks.ianaLinks)
-						.relationships(organizedLinks.getRelationshipLinks())
-						.build())
-				.links(organizedLinks.getIanaLinks())
-				.relationships(organizedLinks.getRelationshipLinks());
+			JsonApiData jsonApiData = jsonApiData()
+					.type(value.getClass().getSimpleName())
+					.id(getId(value.getId()))
+					.attributes(value.getContent())
+					.links(new HashMap<String, String>())
+					.relationships(new HashMap<String, Map<String, String>>())
+					.build();
 
-			provider.findValueSerializer(JsonApiSingle.class, property).serialize(jsonApi.build(), jgen, provider);
+			for (Link link : organizedLinks.getIanaLinks()) {
+				jsonApiData.getLinks().put(link.getRel(), link.getHref());
+			}
+
+			for (Link link : organizedLinks.getRelationshipLinks()) {
+				Map<String, String> subMap = new HashMap<String, String>();
+				subMap.put("self", link.getHref());
+				jsonApiData.getRelationships().put(link.getRel(), subMap);
+			}
+
+			JsonApiSingle jsonApi = JsonApiSingle.builder()
+				.data(jsonApiData)
+				.links(new HashMap<String, String>())
+				.build();
+
+			for (Link link : organizedLinks.getIanaLinks()) {
+				jsonApi.getLinks().put(link.getRel(), link.getHref());
+			}
+
+			provider.findValueSerializer(JsonApiSingle.class, property).serialize(jsonApi, jgen, provider);
 		}
 
 		@Override
@@ -290,7 +298,7 @@ public class Jackson2JsonApiModule extends SimpleModule {
 		@Override
 		public void serialize(Resources<?> value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonGenerationException {
 
-			OrganizedLinks organizedLinks = new OrganizedLinks(value.getLinks());
+			JsonApiOrganizedLinks organizedLinks = new JsonApiOrganizedLinks(value.getLinks());
 
 			JsonApiCollectionBuilder jsonApi = jsonApiCollection();
 
@@ -302,15 +310,27 @@ public class Jackson2JsonApiModule extends SimpleModule {
 
 					Resource resource = (Resource) content;
 
-					OrganizedLinks resourceLinks = new OrganizedLinks(resource.getLinks());
+					JsonApiOrganizedLinks resourceLinks = new JsonApiOrganizedLinks(resource.getLinks());
 
-					data.add(jsonApiData()
-						.type(resource.getContent().getClass().getSimpleName())
-						.id(getId(resource.getId()))
-						.attributes(resource.getContent())
-						.links(resourceLinks.getIanaLinks())
-						.relationships(resourceLinks.getRelationshipLinks())
-						.build());
+					JsonApiData jsonApiData = jsonApiData()
+							.type(resource.getContent().getClass().getSimpleName())
+							.id(getId(resource.getId()))
+							.attributes(resource.getContent())
+							.links(new HashMap<String, String>())
+							.relationships(new HashMap<String, Map<String, String>>())
+							.build();
+
+					for (Link link : resourceLinks.getIanaLinks()) {
+						jsonApiData.getLinks().put(link.getRel(), link.getHref());
+					}
+
+					for (Link link : resourceLinks.getRelationshipLinks()) {
+						Map<String, String> subMap = new HashMap<String, String>();
+						subMap.put("self", link.getHref());
+						jsonApiData.getRelationships().put(link.getRel(), subMap);
+					}
+
+					data.add(jsonApiData);
 
 				} else {
 
@@ -379,7 +399,7 @@ public class Jackson2JsonApiModule extends SimpleModule {
 		@Override
 		public void serialize(PagedResources<?> value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonGenerationException {
 
-			OrganizedLinks organizedLinks = new OrganizedLinks(value.getLinks());
+			JsonApiOrganizedLinks organizedLinks = new JsonApiOrganizedLinks(value.getLinks());
 
 			JsonApiCollectionBuilder jsonApi = jsonApiCollection();
 
@@ -391,15 +411,26 @@ public class Jackson2JsonApiModule extends SimpleModule {
 
 					Resource resource = (Resource) content;
 
-					OrganizedLinks resourceLinks = new OrganizedLinks(resource.getLinks());
+					JsonApiOrganizedLinks resourceLinks = new JsonApiOrganizedLinks(resource.getLinks());
 
-					data.add(jsonApiData()
-						.type(resource.getContent().getClass().getSimpleName())
-						.id(getId(resource.getId()))
-						.attributes(resource.getContent())
-						.links(resourceLinks.getIanaLinks())
-						.relationships(resourceLinks.getRelationshipLinks())
-						.build());
+					JsonApiData jsonApiData = jsonApiData()
+							.type(resource.getContent().getClass().getSimpleName())
+							.id(getId(resource.getId()))
+							.attributes(resource.getContent())
+							.relationships(new HashMap<String, Map<String, String>>())
+							.build();
+
+					for (Link link : resourceLinks.getIanaLinks()) {
+						jsonApiData.getLinks().put(link.getRel(), link.getHref());
+					}
+
+					for (Link link : resourceLinks.getRelationshipLinks()) {
+						Map<String, String> subMap = new HashMap<String, String>();
+						subMap.put("self", link.getHref());
+						jsonApiData.getRelationships().put(link.getRel(), subMap);
+					}
+
+					data.add(jsonApiData);
 
 				} else {
 
@@ -475,8 +506,10 @@ public class Jackson2JsonApiModule extends SimpleModule {
 			JsonApiSingle<?> jsonApi = jp.getCodec().readValues(jp, JsonApiSingle.class).next();
 
 			List<Link> links = new ArrayList<Link>();
-			links.addAll(jsonApi.getLinks());
-			links.addAll(jsonApi.getRelationships());
+
+			for (Map.Entry<String, String> entry : jsonApi.getLinks().entrySet()) {
+				links.add(new Link(entry.getValue()).withRel(entry.getKey()));
+			}
 
 			return links;
 		}
@@ -522,11 +555,9 @@ public class Jackson2JsonApiModule extends SimpleModule {
 			JsonApiSingle<?> jsonApi = (JsonApiSingle<?>) jp.getCodec().readValues(jp, wrappedType).next();
 
 			List<Link> links = new ArrayList<Link>();
-			if (jsonApi.getLinks() != null) {
-				links.addAll(jsonApi.getLinks());
-			}
-			if (jsonApi.getRelationships() != null) {
-				links.addAll(jsonApi.getRelationships());
+
+			for (Map.Entry<String, String> entry : jsonApi.getLinks().entrySet()) {
+				links.add(new Link(entry.getValue()).withRel(entry.getKey()));
 			}
 
 			return new Resource<Object>(jsonApi.getData().getAttributes(), links);
@@ -595,10 +626,14 @@ public class Jackson2JsonApiModule extends SimpleModule {
 
 					List<Link> links = new ArrayList<Link>();
 					if (item.getLinks() != null) {
-						links.addAll(item.getLinks());
+						for (Map.Entry<String, String> entry : item.getLinks().entrySet()) {
+							links.add(new Link(entry.getValue()).withRel(entry.getKey()));
+						}
 					}
 					if (item.getRelationships() != null) {
-						links.addAll(item.getRelationships());
+						for (Map.Entry<String, Map<String, String>> entry : item.getRelationships().entrySet()) {
+							links.add(new Link(entry.getValue().get("self")).withRel(entry.getKey()));
+						}
 					}
 
 					if (this.contentType.containedType(0).hasRawClass(Resource.class)) {
@@ -678,8 +713,16 @@ public class Jackson2JsonApiModule extends SimpleModule {
 				if (this.contentType.hasGenericTypes()) {
 
 					List<Link> links = new ArrayList<Link>();
-					links.addAll(item.getLinks());
-					links.addAll(item.getRelationships());
+					if (item.getLinks() != null) {
+						for (Map.Entry<String, String> entry : item.getLinks().entrySet()) {
+							links.add(new Link(entry.getKey()).withRel(entry.getKey()));
+						}
+					}
+					if (item.getRelationships() != null) {
+						for (Map.Entry<String, Map<String, Map<String, String>>> entry : item.getRelationships().entrySet()) {
+							links.add(new Link(entry.getValue().get("links").get("self")).withRel(entry.getKey()));
+						}
+					}
 
 					if (this.contentType.containedType(0).hasRawClass(Resource.class)) {
 						items.add(new Resource<Object>(itemData, links));

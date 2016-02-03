@@ -3,16 +3,13 @@
     "type" : "Resource",
     "id" : "localhost",
     "attributes" : "first",
-    "links" : [ {
-      "rel" : "self",
-      "href" : "localhost"
-    } ],
-    "relationships" : [ ]
+    "links" : {
+      "self" : "localhost"
+    },
+    "relationships" : { }
   },
-  "links" : [ {
-    "rel" : "self",
-    "href" : "localhost"
-  } ],
-  "relationships" : [ ],
-  "meta" : null
+  "meta" : null,
+  "links" : {
+    "self" : "localhost"
+  }
 }

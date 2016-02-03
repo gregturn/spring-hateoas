@@ -179,12 +179,14 @@ public class Jackson2JsonApiIntegrationTest extends AbstractJackson2MarshallingI
 	public void renderSimplePojos() throws Exception {
 
 		List<Resource<SimplePojo>> data = new ArrayList<Resource<SimplePojo>>();
-		data.add(new Resource<SimplePojo>(new SimplePojo("text", 1), new Link("localhost"), new Link("orders").withRel("orders")));
+		data.add(new Resource<SimplePojo>(new SimplePojo("text", 1), new Link("localhost"), new Link("localhost/orders").withRel("orders")));
 		data.add(new Resource<SimplePojo>(new SimplePojo("text2", 2), new Link("localhost")));
 
 		Resources<Resource<SimplePojo>> resources = new Resources<Resource<SimplePojo>>(data);
 		resources.add(new Link("localhost"));
 		resources.add(new Link("/page/2").withRel("next"));
+
+		System.out.println(mapper.writeValueAsString(resources));
 
 		assertThat(write(resources), is(MappingUtils.read(new ClassPathResource("resources-simple-pojos.json", getClass()))));
 	}
