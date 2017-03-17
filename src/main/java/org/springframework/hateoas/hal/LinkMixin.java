@@ -28,7 +28,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
  * 
  * @author Alexander Baetz
  * @author Oliver Gierke
+ *
+ * @deprecated Use {@link org.springframework.hateoas.mediatype.hal.LinkMixin} instead.
  */
+@Deprecated
 @JsonIgnoreProperties(value = "rel")
 abstract class LinkMixin extends Link {
 

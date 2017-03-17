@@ -80,7 +80,10 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
  * 
  * @author Alexander Baetz
  * @author Oliver Gierke
+ *
+ * @deprecated Use {@link org.springframework.hateoas.mediatype.hal.Jackson2HalModule} instead.
  */
+@Deprecated
 public class Jackson2HalModule extends SimpleModule {
 
 	private static final long serialVersionUID = 7806951456457932384L;

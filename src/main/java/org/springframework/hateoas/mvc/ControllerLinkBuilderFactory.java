@@ -64,7 +64,10 @@ import org.springframework.web.util.UriTemplate;
  * @author Oemer Yildiz
  * @author Kevin Conaway
  * @author Andrew Naydyonock
+ *
+ * @deprecated Use {@link org.springframework.hateoas.web.mvc.ControllerLinkBuilderFactory} instead.
  */
+@Deprecated
 public class ControllerLinkBuilderFactory implements MethodLinkBuilderFactory<ControllerLinkBuilder> {
 
 	private static final MappingDiscoverer DISCOVERER = new AnnotationMappingDiscoverer(RequestMapping.class);

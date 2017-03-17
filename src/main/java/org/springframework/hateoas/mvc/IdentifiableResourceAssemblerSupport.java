@@ -31,7 +31,10 @@ import org.springframework.util.Assert;
  * sure a self-link is always added.
  * 
  * @author Oliver Gierke
+ *
+ * @deprecated Use {@link org.springframework.hateoas.web.mvc.IdentifiableResourceAssemblerSupport} instead.
  */
+@Deprecated
 public abstract class IdentifiableResourceAssemblerSupport<T extends Identifiable<?>, D extends ResourceSupport>
 		extends ResourceAssemblerSupport<T, D> {
 

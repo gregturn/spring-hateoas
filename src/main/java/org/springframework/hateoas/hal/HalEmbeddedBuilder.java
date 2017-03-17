@@ -35,7 +35,10 @@ import org.springframework.util.StringUtils;
  * 
  * @author Oliver Gierke
  * @author Dietrich Schulten
+ *
+ * @deprecated Use {@link org.springframework.hateoas.mediatype.hal.HalEmbeddedBuilder} instead.
  */
+@Deprecated
 class HalEmbeddedBuilder {
 
 	private static final String DEFAULT_REL = "content";

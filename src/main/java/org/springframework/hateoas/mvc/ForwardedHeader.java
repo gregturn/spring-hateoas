@@ -27,7 +27,10 @@ import org.springframework.util.StringUtils;
  *
  * @author Oliver Gierke
  * @see http://tools.ietf.org/html/rfc7239
+ *
+ * @deprecated Use {@link org.springframework.hateoas.web.mvc.ForwardedHeader} instead.
  */
+@Deprecated
 class ForwardedHeader {
 
 	public static String NAME = "Forwarded";

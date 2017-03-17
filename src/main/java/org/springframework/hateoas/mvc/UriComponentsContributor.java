@@ -27,7 +27,10 @@ import org.springframework.web.util.UriComponentsBuilder;
  * 
  * @see MethodLinkBuilderFactory#linkTo(Object)
  * @author Oliver Gierke
+ *
+ * @deprecated Use {@link org.springframework.hateoas.web.mvc.UriComponentsContributor} instead.
  */
+@Deprecated
 public interface UriComponentsContributor {
 
 	/**

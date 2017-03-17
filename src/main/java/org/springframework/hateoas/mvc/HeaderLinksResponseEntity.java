@@ -35,7 +35,10 @@ import org.springframework.util.Assert;
  * kick in.
  * 
  * @author Oliver Gierke
+ *
+ * @deprecated Use {@link org.springframework.hateoas.web.mvc.HeaderLinksResponseEntity} instead.
  */
+@Deprecated
 public class HeaderLinksResponseEntity<T extends ResourceSupport> extends ResponseEntity<T> {
 
 	/**

@@ -15,15 +15,15 @@
  */
 package org.springframework.hateoas.client;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.experimental.Wither;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.springframework.util.Assert;
 
@@ -33,7 +33,10 @@ import org.springframework.util.Assert;
  * @author Greg Turnquist
  * @author Oliver Gierke
  * @since 0.18
+ *
+ * @deprecated Use {@link org.springframework.hateoas.web.traverson.Hop instead.
  */
+@Deprecated
 @Value
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter(AccessLevel.PACKAGE)

@@ -24,7 +24,10 @@ import org.springframework.web.util.UriComponentsBuilder;
  * Simples {@link LinkBuilder} implementation possible. Exposes a link to the current servlet mapping only.
  * 
  * @author Oliver Gierke
+ *
+ * @deprecated Use {@link org.springframework.hateoas.web.mvc.BasicLinkBuilder} instead.
  */
+@Deprecated
 public class BasicLinkBuilder extends LinkBuilderSupport<BasicLinkBuilder> {
 
 	/**

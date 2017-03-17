@@ -27,7 +27,10 @@ import org.springframework.hateoas.Links;
  * @author Oliver Gierke
  * @author Jeff Stano
  * @since 0.9
+ *
+ * @deprecated Use {@link org.springframework.hateoas.mediatype.hal.CurieProvider} instead.
  */
+@Deprecated
 public interface CurieProvider {
 
 	/**

@@ -39,7 +39,10 @@ import org.springframework.util.ReflectionUtils;
  * @author Oliver Gierke
  * @since 0.20
  * @soundtrack Doppelkopf - Die fabelhaften Vier (Von Abseits)
+ *
+ * @deprecated Use {@link org.springframework.hateoas.web.mvc.ResourceProcessorInvoker} instead.
  */
+@Deprecated
 public class ResourceProcessorInvoker {
 
 	private final List<ProcessorWrapper> processors;

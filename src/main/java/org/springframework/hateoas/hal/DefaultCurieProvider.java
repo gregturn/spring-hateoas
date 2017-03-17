@@ -36,7 +36,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
  * @author Oliver Gierke
  * @author Jeff Stano
  * @since 0.9
+ *
+ * @deprecated Use {@link org.springframework.hateoas.mediatype.hal.DefaultCurieProvider} instead.
  */
+@Deprecated
 public class DefaultCurieProvider implements CurieProvider {
 
 	private final Map<String, UriTemplate> curies;

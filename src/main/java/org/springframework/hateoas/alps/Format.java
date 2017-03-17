@@ -23,7 +23,10 @@ import java.util.Locale;
  * @author Oliver Gierke
  * @since 0.15
  * @see http://alps.io/spec/#prop-format
+ *
+ * @deprecated Use {@link org.springframework.hateoas.mediatype.alps.Format} instead.
  */
+@Deprecated
 public enum Format {
 
 	TEXT, HTML, ASCIIDOC;

@@ -23,7 +23,10 @@ import java.util.Locale;
  * @author Oliver Gierke
  * @since 0.15
  * @see http://alps.io/spec/#prop-type
+ *
+ * @deprecated Use {@link org.springframework.hateoas.mediatype.alps.Type} instead.
  */
+@Deprecated
 public enum Type {
 
 	SEMANTIC, SAFE, IDEMPOTENT, UNSAFE;

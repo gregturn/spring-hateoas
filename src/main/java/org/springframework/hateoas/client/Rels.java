@@ -29,7 +29,10 @@ import com.jayway.jsonpath.JsonPath;
  * @author Oliver Gierke
  * @author Greg Turnquist
  * @since 0.11
+ *
+ * @deprecated Use {@link org.springframework.hateoas.web.traverson.Rels} instead.
  */
+@Deprecated
 class Rels {
 
 	/**

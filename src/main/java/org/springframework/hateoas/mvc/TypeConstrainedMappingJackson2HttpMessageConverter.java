@@ -29,7 +29,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * shall only be applied to object trees of a certain base type.
  * 
  * @author Oliver Gierke
+ *
+ * @deprecated Use {@link org.springframework.hateoas.web.mvc.TypeConstrainedMappingJackson2HttpMessageConverter} instead.
  */
+@Deprecated
 public class TypeConstrainedMappingJackson2HttpMessageConverter extends MappingJackson2HttpMessageConverter {
 
 	private final Class<?> type;

@@ -15,14 +15,14 @@
  */
 package org.springframework.hateoas.mvc;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.core.convert.ConversionService;
@@ -41,7 +41,10 @@ import org.springframework.web.util.UriTemplate;
  * Value object to allow accessing {@link MethodInvocation} parameters with the configured {@link AnnotationAttribute}.
  * 
  * @author Oliver Gierke
+ *
+ * @deprecated Use {@link org.springframework.hateoas.web.mvc.AnnotatedParametersParameterAccessor} instead.
  */
+@Deprecated
 @RequiredArgsConstructor
 class AnnotatedParametersParameterAccessor {
 

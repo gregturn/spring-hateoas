@@ -23,7 +23,10 @@ import org.springframework.util.Assert;
 
 /**
  * @author Oliver Gierke
+ *
+ * @deprecated Use {@link org.springframework.hateoas.web.mvc.ControllerRelProvider} instead.
  */
+@Deprecated
 public class ControllerRelProvider implements RelProvider {
 
 	private final Class<?> controllerType;

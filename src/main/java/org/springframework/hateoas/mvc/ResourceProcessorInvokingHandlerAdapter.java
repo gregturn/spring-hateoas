@@ -15,12 +15,12 @@
  */
 package org.springframework.hateoas.mvc;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.hateoas.ResourceProcessor;
 import org.springframework.util.ReflectionUtils;
@@ -41,7 +41,10 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
  * @author Phil Webb
  * @since 0.20
  * @soundtrack Dopplekopf - Regen für immer (Von Abseits)
+ *
+ * @deprecated Use {@link org.springframework.hateoas.web.mvc.ResourceProcessorInvokingHandlerAdapter} instead.
  */
+@Deprecated
 @RequiredArgsConstructor
 public class ResourceProcessorInvokingHandlerAdapter extends RequestMappingHandlerAdapter {
 

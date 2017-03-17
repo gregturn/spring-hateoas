@@ -24,7 +24,10 @@ import lombok.Value;
  * @author Oliver Gierke
  * @since 0.15
  * @see http://alps.io/spec/#prop-ext
+ *
+ * @deprecated Use {@link org.springframework.hateoas.mediatype.alps.Ext} instead.
  */
+@Deprecated
 @Value
 @Builder
 public class Ext {

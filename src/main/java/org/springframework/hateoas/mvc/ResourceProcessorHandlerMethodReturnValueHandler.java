@@ -15,10 +15,10 @@
  */
 package org.springframework.hateoas.mvc;
 
+import java.lang.reflect.Field;
+
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-
-import java.lang.reflect.Field;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.core.ResolvableType;
@@ -40,7 +40,10 @@ import org.springframework.web.method.support.ModelAndViewContainer;
  * @author Oliver Gierke
  * @since 0.20
  * @soundtrack Doppelkopf - Balance (Von Abseits)
+ *
+ * @deprecated Use {@link org.springframework.hateoas.web.mvc.ResourceProcessorHandlerMethodReturnValueHandler} instead.
  */
+@Deprecated
 @RequiredArgsConstructor
 public class ResourceProcessorHandlerMethodReturnValueHandler implements HandlerMethodReturnValueHandler {
 

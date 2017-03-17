@@ -27,7 +27,10 @@ import org.springframework.util.Assert;
  * @author Oliver Gierke
  * @since 0.15
  * @see http://alps.io/spec/#prop-doc
+ *
+ * @deprecated Use {@link org.springframework.hateoas.mediatype.alps.Doc} instead.
  */
+@Deprecated
 @Value
 @Builder
 @AllArgsConstructor

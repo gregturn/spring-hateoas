@@ -28,6 +28,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+/**
+ * @deprecated Use {@link org.springframework.hateoas.mediatype.hal.ResourceSupportMixin} instead.
+ */
+@Deprecated
 abstract class ResourceSupportMixin extends ResourceSupport {
 
 	@Override

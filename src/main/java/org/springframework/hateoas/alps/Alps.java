@@ -31,7 +31,10 @@ import org.springframework.hateoas.alps.Ext.ExtBuilder;
  * @since 0.15
  * @see http://alps.io
  * @see http://alps.io/spec/#prop-alps
+ *
+ * @deprecated Use {@link org.springframework.hateoas.mediatype.alps.Alps} instead.
  */
+@Deprecated
 @Value
 @Builder(builderMethodName = "alps")
 public class Alps {

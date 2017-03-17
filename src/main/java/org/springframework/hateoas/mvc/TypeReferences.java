@@ -31,7 +31,10 @@ import org.springframework.util.Assert;
  * 
  * @author Oliver Gierke
  * @since 0.17
+ *
+ * @deprecated Use {@link org.springframework.hateoas.web.mvc.TypeReferences} instead.
  */
+@Deprecated
 public class TypeReferences {
 
 	/**

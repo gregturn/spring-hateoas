@@ -23,7 +23,10 @@ import org.springframework.hateoas.core.JsonPathLinkDiscoverer;
  * {@link LinkDiscoverer} implementation based on HAL link structure.
  * 
  * @author Oliver Gierke
+ *
+ * @deprecated Use {@link org.springframework.hateoas.mediatype.hal.HalLinkDiscoverer} instead.
  */
+@Deprecated
 public class HalLinkDiscoverer extends JsonPathLinkDiscoverer {
 
 	public HalLinkDiscoverer() {

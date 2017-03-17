@@ -17,14 +17,14 @@ package org.springframework.hateoas.mvc;
 
 import static org.springframework.util.StringUtils.*;
 
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.Delegate;
-
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.Delegate;
 
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.TemplateVariables;
@@ -53,7 +53,10 @@ import org.springframework.web.util.UriTemplate;
  * @author Kevin Conaway
  * @author Andrew Naydyonock
  * @author Oliver Trosien
+ *
+ * @deprecated Use {@link org.springframework.hateoas.web.mvc.ControllerLinkBuilder} instead.
  */
+@Deprecated
 public class ControllerLinkBuilder extends LinkBuilderSupport<ControllerLinkBuilder> {
 
 	private static final String REQUEST_ATTRIBUTES_MISSING = "Could not find current request via RequestContextHolder. Is this being called from a Spring MVC handler?";

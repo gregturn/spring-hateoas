@@ -26,7 +26,10 @@ import java.util.List;
  * @author Oliver Gierke
  * @since 0.15
  * @see http://alps.io/spec/#prop-descriptor
+ *
+ * @deprecated Use {@link org.springframework.hateoas.mediatype.alps.Descriptor} instead.
  */
+@Deprecated
 @Value
 @Builder
 public class Descriptor {

@@ -61,7 +61,10 @@ import com.jayway.jsonpath.JsonPath;
  * @author Greg Turnquist
  * @author Tom Bunting
  * @since 0.11
+ *
+ * @deprecated Use {@link org.springframework.hateoas.web.traverson.Traverson} instead.
  */
+@Deprecated
 public class Traverson {
 
 	private static final LinkDiscoverers DEFAULT_LINK_DISCOVERERS;
